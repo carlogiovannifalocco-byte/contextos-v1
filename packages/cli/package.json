@@ -36,6 +36,15 @@
     "access": "public",
     "tag": "beta"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlogiovannifalocco-byte/contextos-v1.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/carlogiovannifalocco-byte/contextos-v1/issues"
+  },
+  "homepage": "https://github.com/carlogiovannifalocco-byte/contextos-v1#readme",
   "devDependencies": {
     "@types/node": "^22.13.10",
     "typescript": "^5.7.3",

@@ -2,7 +2,8 @@
 
 CLI for [ContextOS](https://github.com/your-org/contextos) — local-first shared memory for AI coding agents.
 
-> **Note:** The npm name `@contextos/cli` is used by another project. This package publishes as **`contextos-memory`**; the command is still **`contextos`**.
+> **Repo:** https://github.com/carlogiovannifalocco-byte/contextos-v1  
+> **npm:** publishes as **`contextos-memory`** (command `contextos`; `@contextos/cli` is taken on npm).
 
 ## Install
 

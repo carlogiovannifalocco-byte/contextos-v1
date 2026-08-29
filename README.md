@@ -19,8 +19,8 @@ More captures from Playwright: [login](docs/screenshots/login.png) · [Agent Hub
 You need **Node 22+**, **npm**, and **PostgreSQL**. Docker is the usual Postgres; see [Quickstart](docs/QUICKSTART.md) if Docker Desktop is not running.
 
 ```bash
-git clone <this-repo>
-cd "ContextOS-v1 official"
+git clone https://github.com/carlogiovannifalocco-byte/contextos-v1
+cd contextos-v1
 node scripts/setup.mjs
 npm run dev
 ```
