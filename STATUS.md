@@ -1,6 +1,9 @@
 # Sprint status
 
-**Last updated:** 2026-08-29 (verify:full green + role labels)
+**Last updated:** 2026-08-29 (published to GitHub)
+
+**Repo:** https://github.com/carlogiovannifalocco-byte/contextos-v1  
+**Release:** https://github.com/carlogiovannifalocco-byte/contextos-v1/releases/tag/v1.0.0-beta
 
 ## What shipped this session
 
