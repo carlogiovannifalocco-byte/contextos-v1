@@ -15,6 +15,7 @@ test.beforeEach(async ({ page }) => {
 test("landing screenshot", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.getByTestId("quickstart")).toBeVisible();
   const compare = page.getByTestId("token-compare");
   await compare.scrollIntoViewIfNeeded();
   await expect(compare.getByRole("heading", { level: 2 })).toBeVisible();

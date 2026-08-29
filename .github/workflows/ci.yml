@@ -45,6 +45,7 @@ jobs:
       - run: npm run audit
       - run: npm run build
       - run: npm run build:cli
+      - run: node scripts/mcp-smoke-cli.mjs
       - run: npm run mcp:smoke
       - run: npx playwright install --with-deps chromium
         working-directory: e2e

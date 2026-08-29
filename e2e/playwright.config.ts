@@ -7,6 +7,7 @@ const apiPort = new URL(api).port || "3001";
 
 export default defineConfig({
   testDir: "./tests",
+  globalSetup: "./global-setup.ts",
   timeout: 90_000,
   fullyParallel: false,
   workers: process.env.CI ? 1 : undefined,

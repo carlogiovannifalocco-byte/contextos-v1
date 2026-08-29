@@ -86,7 +86,7 @@ docker compose -f docker-compose.prod.yml up --build
 
 - Web: [http://localhost:8080](http://localhost:8080)
 - API (MCP): [http://localhost:3001](http://localhost:3001)
-- OpenAPI: [http://localhost:8080/api/docs](http://localhost:8080/api/docs)
+- OpenAPI: [http://localhost:8080/api/docs](http://localhost:8080/api/docs) · [JSON spec](docs/openapi.json)
 
 Migrations run on API start (`prisma migrate deploy` via `scripts/prod-start.mjs`), not `db push`. Browser mutations require a session + CSRF. Agents use `Authorization: Bearer cos_…`.
 
@@ -109,7 +109,7 @@ Migrations run on API start (`prisma migrate deploy` via `scripts/prod-start.mjs
 - [CI integration](docs/CI.md) — pull `contextos brief` into GitHub Actions
 - [Release checklist](docs/RELEASE.md)
 - [npm publish (CLI)](docs/NPM.md)
-- [Contributing](CONTRIBUTING.md)
+- [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security](SECURITY.md)
 - [Changelog](CHANGELOG.md)
 
 ## Known limitations (honest)

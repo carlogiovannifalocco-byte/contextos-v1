@@ -34,6 +34,8 @@
     "verify": "node scripts/verify.mjs",
     "mcp": "npm run start -w @contextos/mcp",
     "mcp:smoke": "node scripts/mcp-smoke.mjs",
+    "mcp:smoke:cli": "node scripts/mcp-smoke-cli.mjs",
+    "openapi:export": "npx tsx scripts/export-openapi.ts",
     "audit": "npm audit --audit-level=high"
   },
   "devDependencies": {

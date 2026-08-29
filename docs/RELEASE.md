@@ -8,6 +8,7 @@ Use this before tagging a public release or sharing the repo widely.
 node scripts/setup.mjs
 npm run verify:full    # tests + web/cli build + audit
 npm run test:e2e
+npm run openapi:export   # refresh docs/openapi.json
 ```
 
 On Linux/WSL (production path):

@@ -1,4 +1,4 @@
-import { useState, type FormEvent, useEffect } from "react";
+import { useState, type FormEvent, useEffect, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api";
@@ -16,23 +16,24 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const triedDemo = useRef(false);
 
   useEffect(() => {
-    if (demo && mode === "login") {
-      void (async () => {
-        setPending(true);
-        try {
-          await api("/api/v1/auth/login", {
-            method: "POST",
-            body: JSON.stringify({ email: "demo@contextos.dev", password: "DemoPassw0rd!" }),
-          });
-          setAuthed(true);
-          navigate("/app");
-        } catch {
-          setPending(false);
-        }
-      })();
-    }
+    if (!demo || mode !== "login" || triedDemo.current) return;
+    triedDemo.current = true;
+    void (async () => {
+      setPending(true);
+      try {
+        await api("/api/v1/auth/login", {
+          method: "POST",
+          body: JSON.stringify({ email: "demo@contextos.dev", password: "DemoPassw0rd!" }),
+        });
+        setAuthed(true);
+        navigate("/app");
+      } catch {
+        setPending(false);
+      }
+    })();
   }, [demo, mode, navigate, setAuthed]);
 
   async function onSubmit(e: FormEvent) {

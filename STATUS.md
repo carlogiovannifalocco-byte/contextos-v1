@@ -42,7 +42,7 @@
 | 3 | Demo register → scan/seed → memory → MCP → SSE | **Pass** |
 | 4 | UI surfaces, i18n, a11y, screenshots | **Pass** (landing, brief, privacy, viewer, pricing) |
 | 5 | Security (cookies, CSRF, hashes, Helmet + CSP) | **Pass** on code. nginx SPA origin now has baseline security headers. |
-| 6 | Unit + API integration + Playwright + CI YAML | **Pass** (97 unit/API + 7 e2e) |
+| 6 | Unit + API integration + Playwright + CI YAML | **Pass** (99 unit/API + 8 e2e) |
 | 7 | Docs | **Pass** (README, MCP, QUICKSTART; Docker honesty updated) |
 | 8 | `npm audit --audit-level=high` | **Pass** (0 high vulnerabilities) |
 | 9 | Honest v1.0 Beta | **Pass** |
@@ -53,10 +53,10 @@
 ## Test counts
 
 - Shared: **5**
-- API: **41** (21 integration + 21 unit including rank/context)
+- API: **42** (21 integration + 21 unit including rank/context/openapi)
 - CLI: **51**
-- Root `npm test`: **97** (shared + api + cli)
-- Playwright e2e: **7** (+ pricing screenshot)
+- Root `npm test`: **99** (shared + api + cli)
+- Playwright e2e: **8** (+ demo quick login)
 
 ## How to run (this machine)
 
