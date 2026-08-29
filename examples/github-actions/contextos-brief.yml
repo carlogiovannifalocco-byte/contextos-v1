@@ -1,0 +1,48 @@
+# Copy to .github/workflows/contextos-brief.yml in your repo.
+# Requires repository secrets: CONTEXTOS_API_URL, CONTEXTOS_AGENT_KEY, CONTEXTOS_PROJECT_ID
+
+name: ContextOS brief
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install and build CLI
+        run: |
+          npm install
+          npm run build -w contextos-memory
+
+      - name: Render agent brief
+        env:
+          CONTEXTOS_API_URL: ${{ secrets.CONTEXTOS_API_URL }}
+          CONTEXTOS_AGENT_KEY: ${{ secrets.CONTEXTOS_AGENT_KEY }}
+          CONTEXTOS_PROJECT_ID: ${{ secrets.CONTEXTOS_PROJECT_ID }}
+        run: |
+          npx contextos brief \
+            --api "$CONTEXTOS_API_URL" \
+            --project "$CONTEXTOS_PROJECT_ID" \
+            --key "$CONTEXTOS_AGENT_KEY" \
+            --format md \
+            --budget 2000 \
+            > contextos-brief.md
+          echo "## ContextOS brief ($(date -u +%Y-%m-%d))" >> "$GITHUB_STEP_SUMMARY"
+          echo '```markdown' >> "$GITHUB_STEP_SUMMARY"
+          head -n 40 contextos-brief.md >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: contextos-brief
+          path: contextos-brief.md
+          retention-days: 7

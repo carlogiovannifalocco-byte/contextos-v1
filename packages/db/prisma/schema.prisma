@@ -1,0 +1,401 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProjectRole {
+  owner
+  member
+  viewer
+}
+
+enum MemoryType {
+  decision
+  convention
+  fact
+  note
+  constraint
+  risk
+}
+
+enum MemoryStatus {
+  draft
+  active
+  archived
+}
+
+enum ActorType {
+  user
+  agent
+  system
+}
+
+enum TaskStatus {
+  open
+  in_progress
+  blocked
+  done
+}
+
+enum ScanJobStatus {
+  queued
+  running
+  completed
+  failed
+  cancelled
+}
+
+enum ProposalStatus {
+  pending
+  accepted
+  rejected
+}
+
+enum ConflictStatus {
+  open
+  merged
+  resolved
+  dismissed
+}
+
+enum MemoryRelationKind {
+  supersedes
+  contradicts
+  references
+  parent_of
+}
+
+enum PresenceStatus {
+  online
+  idle
+  offline
+}
+
+enum HandoffStatus {
+  open
+  accepted
+  closed
+}
+
+model User {
+  id             String          @id @default(cuid())
+  email          String          @unique
+  passwordHash   String
+  name           String
+  language       String          @default("en")
+  theme          String          @default("system")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  sessions       Session[]
+  ownedProjects  Project[]       @relation("ProjectOwner")
+  memberships    ProjectMember[]
+  sentInvites    ProjectInvite[] @relation("InviteSender")
+  events         Event[]
+  verifiedMemories MemoryEntry[] @relation("MemoryVerifier")
+  createdMemories  MemoryEntry[] @relation("MemoryCreatorUser")
+  memoryVersions   MemoryVersion[] @relation("VersionCreatorUser")
+  createdTasks     Task[]        @relation("TaskCreatorUser")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  csrfToken String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  ip        String?
+  userAgent String?
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  ownerId     String
+  owner       User     @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  name        String
+  slug        String
+  description String   @default("")
+  rootPath    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     ProjectMember[]
+  agents      Agent[]
+  memories    MemoryEntry[]
+  tasks       Task[]
+  handoffs    Handoff[]
+  events      Event[]
+  scanJobs    ScanJob[]
+  conflicts   Conflict[]
+  webhooks    Webhook[]
+  ignoreRules IgnoreRules?
+  invites     ProjectInvite[]
+
+  @@unique([ownerId, slug])
+  @@index([ownerId])
+}
+
+model ProjectMember {
+  id        String      @id @default(cuid())
+  projectId String
+  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      ProjectRole @default(member)
+  createdAt DateTime    @default(now())
+
+  @@unique([projectId, userId])
+}
+
+model ProjectInvite {
+  id        String      @id @default(cuid())
+  projectId String
+  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  email     String
+  role      ProjectRole @default(member)
+  invitedBy String
+  inviter   User        @relation("InviteSender", fields: [invitedBy], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+
+  @@unique([projectId, email])
+  @@index([email])
+}
+
+model Agent {
+  id            String         @id @default(cuid())
+  projectId     String
+  project       Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name          String
+  kind          String         @default("generic")
+  description   String         @default("")
+  lastHeartbeat DateTime?
+  presence      PresenceStatus @default(offline)
+  activity      String         @default("")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  keys           AgentKey[]
+  memories       MemoryEntry[]   @relation("MemoryCreatorAgent")
+  versions       MemoryVersion[] @relation("VersionCreatorAgent")
+  assignedTasks  Task[]          @relation("TaskAssignee")
+  createdTasks   Task[]          @relation("TaskCreatorAgent")
+  handoffsFrom   Handoff[]       @relation("HandoffFrom")
+  handoffsTo     Handoff[]       @relation("HandoffTo")
+  events         Event[]
+
+  @@index([projectId])
+}
+
+model AgentKey {
+  id        String    @id @default(cuid())
+  agentId   String
+  agent     Agent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  keyHash   String
+  prefix    String
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  @@index([agentId])
+}
+
+model MemoryEntry {
+  id               String       @id @default(cuid())
+  projectId        String
+  project          Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type             MemoryType
+  status           MemoryStatus @default(active)
+  title            String
+  body             String
+  tags             String[]     @default([])
+  pinned           Boolean      @default(false)
+  verified         Boolean      @default(false)
+  verifiedAt       DateTime?
+  verifiedById     String?
+  verifiedBy       User?        @relation("MemoryVerifier", fields: [verifiedById], references: [id], onDelete: SetNull)
+  currentVersion   Int          @default(1)
+  sourcePath       String?
+  reviewedAt       DateTime?
+  createdByType    ActorType
+  createdByUserId  String?
+  createdByUser    User?        @relation("MemoryCreatorUser", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  createdByAgentId String?
+  createdByAgent   Agent?       @relation("MemoryCreatorAgent", fields: [createdByAgentId], references: [id], onDelete: SetNull)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  versions       MemoryVersion[]
+  conflictsA     Conflict[]       @relation("ConflictA")
+  conflictsB     Conflict[]       @relation("ConflictB")
+  relationsFrom  MemoryRelation[] @relation("RelationFrom")
+  relationsTo    MemoryRelation[] @relation("RelationTo")
+
+  @@index([projectId, status])
+  @@index([projectId, type])
+}
+
+model MemoryRelation {
+  id        String             @id @default(cuid())
+  projectId String
+  fromId    String
+  from      MemoryEntry        @relation("RelationFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  toId      String
+  to        MemoryEntry        @relation("RelationTo", fields: [toId], references: [id], onDelete: Cascade)
+  kind      MemoryRelationKind
+  note      String             @default("")
+  createdAt DateTime           @default(now())
+
+  @@unique([fromId, toId, kind])
+  @@index([projectId, kind])
+  @@index([toId])
+}
+
+model MemoryVersion {
+  id               String      @id @default(cuid())
+  memoryId         String
+  memory           MemoryEntry @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+  version          Int
+  type             MemoryType
+  title            String
+  body             String
+  tags             String[]    @default([])
+  createdByType    ActorType
+  createdByUserId  String?
+  createdByUser    User?       @relation("VersionCreatorUser", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  createdByAgentId String?
+  createdByAgent   Agent?      @relation("VersionCreatorAgent", fields: [createdByAgentId], references: [id], onDelete: SetNull)
+  createdAt        DateTime    @default(now())
+
+  @@unique([memoryId, version])
+}
+
+model Task {
+  id               String     @id @default(cuid())
+  projectId        String
+  project          Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title            String
+  description      String     @default("")
+  status           TaskStatus @default(open)
+  assigneeAgentId  String?
+  assignee         Agent?     @relation("TaskAssignee", fields: [assigneeAgentId], references: [id], onDelete: SetNull)
+  createdByType    ActorType
+  createdByUserId  String?
+  createdByUser    User?      @relation("TaskCreatorUser", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  createdByAgentId String?
+  createdByAgent   Agent?     @relation("TaskCreatorAgent", fields: [createdByAgentId], references: [id], onDelete: SetNull)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  @@index([projectId, status])
+}
+
+model Handoff {
+  id          String        @id @default(cuid())
+  projectId   String
+  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  fromAgentId String?
+  fromAgent   Agent?        @relation("HandoffFrom", fields: [fromAgentId], references: [id], onDelete: SetNull)
+  toAgentId   String?
+  toAgent     Agent?        @relation("HandoffTo", fields: [toAgentId], references: [id], onDelete: SetNull)
+  summary     String
+  details     String        @default("")
+  status      HandoffStatus @default(open)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([projectId])
+}
+
+model Event {
+  id           String    @id @default(cuid())
+  projectId    String
+  project      Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type         String
+  payload      Json      @default("{}")
+  actorType    ActorType @default(system)
+  actorUserId  String?
+  actorUser    User?     @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+  actorAgentId String?
+  actorAgent   Agent?    @relation(fields: [actorAgentId], references: [id], onDelete: SetNull)
+  createdAt    DateTime  @default(now())
+
+  @@index([projectId, createdAt])
+  @@index([projectId, type])
+}
+
+model ScanJob {
+  id         String         @id @default(cuid())
+  projectId  String
+  project    Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  status     ScanJobStatus  @default(queued)
+  rootPath   String
+  error      String?
+  filesSeen  Int            @default(0)
+  cancelled  Boolean        @default(false)
+  proposals  ScanProposal[]
+  createdAt  DateTime       @default(now())
+  startedAt  DateTime?
+  finishedAt DateTime?
+
+  @@index([projectId])
+}
+
+model ScanProposal {
+  id         String         @id @default(cuid())
+  scanJobId  String
+  scanJob    ScanJob        @relation(fields: [scanJobId], references: [id], onDelete: Cascade)
+  type       MemoryType
+  title      String
+  body       String
+  sourcePath String         @default("")
+  status     ProposalStatus @default(pending)
+  createdAt  DateTime       @default(now())
+}
+
+model Conflict {
+  id          String         @id @default(cuid())
+  projectId   String
+  project     Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  memoryAId   String
+  memoryA     MemoryEntry    @relation("ConflictA", fields: [memoryAId], references: [id], onDelete: Cascade)
+  memoryBId   String
+  memoryB     MemoryEntry    @relation("ConflictB", fields: [memoryBId], references: [id], onDelete: Cascade)
+  reason      String
+  status      ConflictStatus @default(open)
+  resolution  String         @default("")
+  mergedTitle String?
+  mergedBody  String?
+  createdAt   DateTime       @default(now())
+  resolvedAt  DateTime?
+
+  @@index([projectId, status])
+}
+
+model Webhook {
+  id          String    @id @default(cuid())
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  url         String
+  secret      String
+  events      String[]  @default([])
+  enabled     Boolean   @default(true)
+  lastFiredAt DateTime?
+  lastStatus  Int?
+  createdAt   DateTime  @default(now())
+}
+
+model IgnoreRules {
+  id        String   @id @default(cuid())
+  projectId String   @unique
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  content   String   @default("node_modules\n.git\ndist\nbuild\n.env\ncoverage\n")
+  updatedAt DateTime @updatedAt
+}

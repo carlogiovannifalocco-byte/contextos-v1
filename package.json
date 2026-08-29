@@ -1,0 +1,45 @@
+{
+  "name": "contextos",
+  "version": "1.0.0-beta",
+  "private": true,
+  "type": "module",
+  "description": "Shared, versioned, permissioned memory layer for AI coding agents.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "connectors/*",
+    "e2e"
+  ],
+  "scripts": {
+    "postinstall": "npm run generate -w @contextos/db",
+    "setup": "node scripts/setup.mjs",
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev -w @contextos/api\" \"npm run dev -w @contextos/web\"",
+    "dev:api": "npm run dev -w @contextos/api",
+    "dev:web": "npm run dev -w @contextos/web",
+    "db:up": "docker compose up -d postgres",
+    "db:migrate": "npm run migrate -w @contextos/db",
+    "db:seed": "npm run seed -w @contextos/db",
+    "build": "npm run build -w @contextos/web",
+    "build:cli": "npm run build -w contextos-memory",
+    "pack:cli": "node scripts/pack-cli.mjs",
+    "prepare:release": "node scripts/prepare-release.mjs",
+    "verify:full": "npm test && npm run build && npm run build:cli && npm run audit",
+    "test": "npm run test -w @contextos/shared && npm run test -w @contextos/api && npm run test -w contextos-memory",
+    "test:e2e": "npm run test -w @contextos/e2e",
+    "verify": "node scripts/verify.mjs",
+    "mcp": "npm run start -w @contextos/mcp",
+    "mcp:smoke": "node scripts/mcp-smoke.mjs",
+    "audit": "npm audit --audit-level=high"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3"
+  },
+  "overrides": {
+    "@fastify/static": "10.1.3"
+  }
+}

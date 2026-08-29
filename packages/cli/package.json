@@ -1,0 +1,44 @@
+{
+  "name": "contextos-memory",
+  "version": "1.0.0-beta",
+  "description": "Wire a repo and its AI coding agents to ContextOS with one command.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "contextos",
+    "mcp",
+    "ai-agents",
+    "cursor",
+    "claude-code",
+    "memory",
+    "context",
+    "coding-agents"
+  ],
+  "bin": {
+    "contextos": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "beta"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.8"
+  }
+}

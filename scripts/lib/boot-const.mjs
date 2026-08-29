@@ -1,0 +1,1 @@
+export const MIN_COOKIE_SECRET_LENGTH = 32;

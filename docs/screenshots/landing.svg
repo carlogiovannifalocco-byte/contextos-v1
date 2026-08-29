@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#d7dfd3"/>
+  <rect x="40" y="28" width="1200" height="56" rx="12" fill="#eef3ea"/>
+  <text x="72" y="64" font-family="Georgia, serif" font-size="22" fill="#14181f">ContextOS  ·  SHARED BRAIN</text>
+  <text x="980" y="64" font-family="ui-monospace, monospace" font-size="14" fill="#1f6f6a">v1.0 Beta</text>
+  <text x="72" y="180" font-family="Georgia, serif" font-size="44" fill="#14181f">Stop re-explaining the same</text>
+  <text x="72" y="230" font-family="Georgia, serif" font-size="44" fill="#14181f">codebase to every agent.</text>
+  <text x="72" y="290" font-family="Georgia, serif" font-size="20" fill="#1c222c">Shared brain for AI agents. Local-first. Human verifies.</text>
+  <rect x="72" y="330" width="180" height="44" rx="22" fill="#14181f"/>
+  <text x="96" y="358" font-family="Georgia, serif" font-size="16" fill="#d7dfd3">Run it locally</text>
+  <rect x="780" y="140" width="430" height="460" rx="18" fill="#eef3ea" stroke="#c46b32"/>
+  <text x="800" y="178" font-family="ui-monospace, monospace" font-size="12" fill="#c46b32">LIVE SHARED BRAIN  ·  atlas-cli</text>
+  <text x="800" y="230" font-family="Georgia, serif" font-size="16" fill="#1f6f6a">Forge  decision  Postgres only</text>
+  <text x="800" y="270" font-family="Georgia, serif" font-size="16" fill="#1f6f6a">Scribe convention  no default exports</text>
+  <text x="800" y="310" font-family="Georgia, serif" font-size="16" fill="#c24b3a">Forge  conflict   gitignore syntax</text>
+  <text x="800" y="350" font-family="Georgia, serif" font-size="16" fill="#c24b3a">Scribe conflict   glob-only</text>
+  <text x="800" y="410" font-family="Georgia, serif" font-size="16" fill="#14181f">Ada still has to merge this.</text>
+</svg>

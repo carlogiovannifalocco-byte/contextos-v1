@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: contextos
+          POSTGRES_PASSWORD: contextos
+          POSTGRES_DB: contextos
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U contextos -d contextos"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql://contextos:contextos@localhost:5432/contextos
+      COOKIE_SECRET: ci-cookie-secret-must-be-32-chars-min
+      NODE_ENV: test
+      PUBLIC_WEB_ORIGIN: http://127.0.0.1:5173
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:5173
+      CONTEXTOS_API_ORIGIN: http://127.0.0.1:3001
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - run: npm run generate -w @contextos/db
+      - run: npm run db:migrate
+      - run: npm test
+        env:
+          DATABASE_URL: postgresql://contextos:contextos@localhost:5432/contextos
+          COOKIE_SECRET: ci-cookie-secret-must-be-32-chars-min
+      - run: npm run audit
+      - run: npm run build
+      - run: npm run build:cli
+      - run: npm run mcp:smoke
+      - run: npx playwright install --with-deps chromium
+        working-directory: e2e
+      - run: npm run test:e2e
+        env:
+          NODE_ENV: development
+          PORT: "3001"
+          WEB_PORT: "5173"
