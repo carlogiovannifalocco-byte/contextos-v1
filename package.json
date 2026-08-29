@@ -26,6 +26,7 @@
     "build": "npm run build -w @contextos/web",
     "build:cli": "npm run build -w contextos-memory",
     "pack:cli": "node scripts/pack-cli.mjs",
+    "upload:cli-release": "node scripts/upload-cli-release.mjs",
     "prepare:release": "node scripts/prepare-release.mjs",
     "verify:full": "npm test && npm run build && npm run build:cli && npm run audit",
     "test": "npm run test -w @contextos/shared && npm run test -w @contextos/api && npm run test -w contextos-memory",

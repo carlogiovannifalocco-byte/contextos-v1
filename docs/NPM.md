@@ -4,6 +4,15 @@ The workspace package lives in `packages/cli`. It publishes to npm as **`context
 
 The installed command remains **`contextos`**.
 
+## Install today (GitHub release)
+
+```bash
+npm install -g https://github.com/carlogiovannifalocco-byte/contextos-v1/releases/download/v1.0.0-beta/contextos-memory-1.0.0-beta.tgz
+contextos init --api http://127.0.0.1:3010
+```
+
+Upload a new tarball after version bumps: `npm run upload:cli-release`.
+
 ## Pre-flight
 
 ```bash

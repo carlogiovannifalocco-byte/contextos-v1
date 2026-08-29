@@ -77,7 +77,13 @@ node scripts/pack-cli.mjs
 cd packages/cli && npm publish --access public --tag beta
 ```
 
-See [NPM.md](./NPM.md).
+See [NPM.md](./NPM.md). Until `NPM_TOKEN` is set, install the CLI from the release asset:
+
+```bash
+npm install -g https://github.com/carlogiovannifalocco-byte/contextos-v1/releases/download/v1.0.0-beta/contextos-memory-1.0.0-beta.tgz
+```
+
+Or upload a new tarball after version bumps: `npm run upload:cli-release`.
 
 ## What we ship
 

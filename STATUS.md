@@ -3,7 +3,9 @@
 **Last updated:** 2026-08-29 (published to GitHub)
 
 **Repo:** https://github.com/carlogiovannifalocco-byte/contextos-v1  
-**Release:** https://github.com/carlogiovannifalocco-byte/contextos-v1/releases/tag/v1.0.0-beta
+**Release:** https://github.com/carlogiovannifalocco-byte/contextos-v1/releases/tag/v1.0.0-beta  
+**CI:** passing (97 unit + 7 e2e)  
+**CLI install:** [release tarball](https://github.com/carlogiovannifalocco-byte/contextos-v1/releases/download/v1.0.0-beta/contextos-memory-1.0.0-beta.tgz) (npm registry pending `NPM_TOKEN`)
 
 ## What shipped this session
 

@@ -1,5 +1,9 @@
 # ContextOS
 
+[![CI](https://github.com/carlogiovannifalocco-byte/contextos-v1/actions/workflows/ci.yml/badge.svg)](https://github.com/carlogiovannifalocco-byte/contextos-v1/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/carlogiovannifalocco-byte/contextos-v1?include_prereleases&label=release)](https://github.com/carlogiovannifalocco-byte/contextos-v1/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 **Shared brain for AI agents.**
 
 Stop re-explaining the same codebase to every agent.
@@ -38,7 +42,17 @@ Then:
 1. Sign in and open **Atlas CLI**
 2. Open **Brief** — see the exact markdown your agents receive (budget + focus)
 3. Memory, tasks, and the conflict banner should already have a story
-4. Wire an agent: `npm run build -w contextos-memory` then `npx contextos-memory init` (see `docs/MCP.md`)
+4. Wire an agent — install the CLI, then init:
+
+```bash
+# from GitHub release (no npm account needed)
+npm install -g https://github.com/carlogiovannifalocco-byte/contextos-v1/releases/download/v1.0.0-beta/contextos-memory-1.0.0-beta.tgz
+
+# or when published: npx contextos-memory init
+contextos init --api http://127.0.0.1:3010
+```
+
+See `docs/MCP.md` for MCP env vars.
 5. Watch Activity while an agent writes memory (SSE)
 
 ## Tests

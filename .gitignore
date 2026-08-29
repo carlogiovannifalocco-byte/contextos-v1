@@ -26,3 +26,4 @@ packages/db/generated/
 .cache/
 tmp/
 temp/
+*.tgz

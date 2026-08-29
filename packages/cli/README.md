@@ -1,6 +1,6 @@
 # contextos-memory
 
-CLI for [ContextOS](https://github.com/your-org/contextos) — local-first shared memory for AI coding agents.
+CLI for [ContextOS](https://github.com/carlogiovannifalocco-byte/contextos-v1) — local-first shared memory for AI coding agents.
 
 > **Repo:** https://github.com/carlogiovannifalocco-byte/contextos-v1  
 > **npm:** publishes as **`contextos-memory`** (command `contextos`; `@contextos/cli` is taken on npm).
