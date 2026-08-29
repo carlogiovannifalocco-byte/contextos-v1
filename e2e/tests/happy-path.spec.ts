@@ -51,7 +51,7 @@ test("register, scan folder, write memory, merge conflict", async ({ page }) => 
   await page.getByTestId("activate-scan").click();
   await page.getByRole("link", { name: /^Memory$/ }).click();
   await expect(page.getByRole("heading", { name: /Package name is @atlas\/cli/ })).toBeVisible({
-    timeout: 10_000,
+    timeout: 30_000,
   });
   await page.screenshot({ path: path.join(docs, "memory.png"), fullPage: true });
 

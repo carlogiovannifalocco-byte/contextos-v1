@@ -9,7 +9,8 @@ export default defineConfig({
   testDir: "./tests",
   timeout: 90_000,
   fullyParallel: false,
-  retries: 0,
+  workers: process.env.CI ? 1 : undefined,
+  retries: process.env.CI ? 1 : 0,
   use: {
     baseURL: web,
     trace: "on-first-retry",

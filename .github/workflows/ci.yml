@@ -48,6 +48,10 @@ jobs:
       - run: npm run mcp:smoke
       - run: npx playwright install --with-deps chromium
         working-directory: e2e
+      - run: npm run db:seed
+        env:
+          DATABASE_URL: postgresql://contextos:contextos@localhost:5432/contextos
+          COOKIE_SECRET: ci-cookie-secret-must-be-32-chars-min
       - run: npm run test:e2e
         env:
           NODE_ENV: development

@@ -20,9 +20,16 @@ node scripts/pack-cli.mjs
 
 ## Publish (maintainers)
 
+**Option A — GitHub Actions (recommended)**
+
+1. Create an npm access token (Automation or Publish) at https://www.npmjs.com/settings/~/tokens
+2. Add it as repo secret **`NPM_TOKEN`** on GitHub (Settings → Secrets → Actions)
+3. Re-publish the release (or create a patch release). Workflow: `.github/workflows/publish-cli.yml` runs on `release: published`.
+
+**Option B — local**
+
 1. Log in: `npm login`
-2. Set `repository` in `packages/cli/package.json` to your real GitHub URL (optional but recommended).
-3. From `packages/cli`:
+2. From `packages/cli`:
 
 ```bash
 npm publish --access public --tag beta
