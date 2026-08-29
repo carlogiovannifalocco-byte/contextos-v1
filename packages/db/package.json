@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@contextos/shared": "*",
-    "@prisma/client": "^6.12.0",
+    "@prisma/client": "^7.10.0",
     "argon2": "^0.41.1",
     "prisma": "6.12.0"
   },
