@@ -45,10 +45,10 @@ function ascend(start: string): string | undefined {
 }
 
 /**
- * The MCP entry in the config files runs `npm run mcp` from a ContextOS
- * checkout, so `init` has to know where that checkout lives.
+ * Optional monorepo checkout for `npm run mcp`. When absent, `init` uses the
+ * bundled `contextos-mcp` binary from the global CLI install.
  */
-export function resolveContextosRoot(override: string | undefined, cwd: string): string {
+export function tryResolveContextosRoot(override: string | undefined, cwd: string): string | undefined {
   if (override !== undefined) {
     const resolved = path.resolve(cwd, override);
     if (!isContextosCheckout(resolved)) {
@@ -56,11 +56,16 @@ export function resolveContextosRoot(override: string | undefined, cwd: string):
     }
     return resolved;
   }
-  const fromCli = ascend(path.dirname(fileURLToPath(import.meta.url)));
-  if (fromCli) return fromCli;
-  const fromCwd = ascend(cwd);
-  if (fromCwd) return fromCwd;
-  throw new CliError(
-    `Could not find a ContextOS checkout. Run "${CLI_NAME} init --mcp-cwd <path-to-contextos-repo>".`,
-  );
+  return ascend(path.dirname(fileURLToPath(import.meta.url))) ?? ascend(cwd);
+}
+
+/** @deprecated Prefer tryResolveContextosRoot — kept for callers that require a checkout. */
+export function resolveContextosRoot(override: string | undefined, cwd: string): string {
+  const root = tryResolveContextosRoot(override, cwd);
+  if (!root) {
+    throw new CliError(
+      `Could not find a ContextOS checkout. Run "${CLI_NAME} init --mcp-cwd <path-to-contextos-repo>" or install contextos-memory globally.`,
+    );
+  }
+  return root;
 }

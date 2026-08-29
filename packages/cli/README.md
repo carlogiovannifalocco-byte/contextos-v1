@@ -8,9 +8,9 @@ CLI for [ContextOS](https://github.com/carlogiovannifalocco-byte/contextos-v1) â
 ## Install
 
 ```bash
-npm install -g contextos-memory
-# or run once:
-npx contextos-memory init --api http://127.0.0.1:3001
+npm install -g https://github.com/carlogiovannifalocco-byte/contextos-v1/releases/download/v1.0.0-beta/contextos-memory-1.0.0-beta.tgz
+# or after npm publish: npm install -g contextos-memory
+contextos init --api http://127.0.0.1:3010
 ```
 
 Requires **Node 22+** and a running ContextOS API (self-hosted).

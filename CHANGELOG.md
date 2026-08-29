@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0-beta — 2026-08-29 (post-release)
+
+- **Bundled MCP** — `contextos init` writes `contextos-mcp` (no monorepo checkout)
+- **Landing quickstart** — demo login, CLI install, Docker one-liner
+- **Docker prod seed** — `SEED_DEMO=true` loads Atlas CLI demo on first boot
+- **GitHub hygiene** — SECURITY.md, CODE_OF_CONDUCT, issue templates
+- **OpenAPI** — Bearer `cos_` + session cookie security schemes
+
 ## 1.0.0-beta — 2026-08-29
 
 First publication-oriented local-first cut.
@@ -14,7 +22,9 @@ First publication-oriented local-first cut.
 
 ### Onboarding
 
-- `contextos-memory` on npm (command `contextos`) — `init`, `status`, `brief` (51 unit tests). `@contextos/cli` is taken on npm.
+### Onboarding
+
+- `contextos-memory` on npm (command `contextos`) — `init`, `status`, `brief` (52 unit tests). MCP bundled as `contextos-mcp` — no repo checkout required.
 - Landing **TokenCompare** — interactive token savings calculator (dump vs compiled brief)
 - Privacy **Webhooks** panel — list, pause, remove; signing secret shown once
 - `docs/CI.md` + `examples/github-actions/contextos-brief.yml` for pipeline brief export

@@ -60,20 +60,29 @@ export function parseMcpConfig(raw: string, label: string): McpConfigFile {
 }
 
 export function buildServerEntry(input: {
-  contextosRoot: string;
+  contextosRoot?: string;
   apiUrl: string;
   agentKey: string;
   projectId: string;
 }): McpServerEntry {
+  const env = {
+    CONTEXTOS_API_URL: input.apiUrl,
+    CONTEXTOS_AGENT_KEY: input.agentKey,
+    CONTEXTOS_PROJECT_ID: input.projectId,
+  };
+  if (input.contextosRoot) {
+    return {
+      command: "npm",
+      args: ["run", "mcp"],
+      cwd: toPosixPath(input.contextosRoot),
+      env,
+    };
+  }
   return {
-    command: "npm",
-    args: ["run", "mcp"],
-    cwd: toPosixPath(input.contextosRoot),
-    env: {
-      CONTEXTOS_API_URL: input.apiUrl,
-      CONTEXTOS_AGENT_KEY: input.agentKey,
-      CONTEXTOS_PROJECT_ID: input.projectId,
-    },
+    command: "contextos-mcp",
+    args: [],
+    cwd: ".",
+    env,
   };
 }
 

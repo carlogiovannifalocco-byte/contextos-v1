@@ -40,7 +40,14 @@
     "beat1": "Two agents connect with cos_ keys.",
     "beat2": "They write the same shared memory.",
     "beat3": "Conflicts show up instead of silent contradiction.",
-    "beat4": "You verify and merge. The tape stays honest."
+    "beat4": "You verify and merge. The tape stays honest.",
+    "quickstartTitle": "Three ways in",
+    "quickstartDemoTitle": "Demo story",
+    "quickstartDemoBody": "Atlas CLI — two agents, one open conflict, seeded memory. No setup.",
+    "quickstartCliTitle": "Wire your repo",
+    "quickstartCliBody": "Install the CLI, sign in, and write MCP config in one command.",
+    "quickstartDockerTitle": "Docker compose",
+    "quickstartDockerBody": "Production path on your machine. Demo data seeds on first boot."
   },
   "value": {
     "kicker": "Why a compiler, not a dump",
@@ -66,7 +73,8 @@
     "hasAccount": "Already have an account?",
     "error": "Check the form and try again.",
     "invalidEmail": "Enter a valid email.",
-    "weakPassword": "Password must be at least 10 characters and include a letter and a number."
+    "weakPassword": "Password must be at least 10 characters and include a letter and a number.",
+    "demoHint": "Try the seeded demo:"
   },
   "app": {
     "onboarding": "Give your agents a brain",

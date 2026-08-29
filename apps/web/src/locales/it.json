@@ -40,7 +40,14 @@
     "beat1": "Due agenti si collegano con chiavi cos_.",
     "beat2": "Scrivono la stessa memoria condivisa.",
     "beat3": "I conflitti emergono, invece di contraddirsi in silenzio.",
-    "beat4": "Tu verifichi e unisci. Il nastro resta onesto."
+    "beat4": "Tu verifichi e unisci. Il nastro resta onesto.",
+    "quickstartTitle": "Tre modi per iniziare",
+    "quickstartDemoTitle": "Storia demo",
+    "quickstartDemoBody": "Atlas CLI — due agenti, un conflitto aperto, memoria già popolata.",
+    "quickstartCliTitle": "Collega il tuo repo",
+    "quickstartCliBody": "Installa la CLI, accedi e scrivi la config MCP in un comando.",
+    "quickstartDockerTitle": "Docker compose",
+    "quickstartDockerBody": "Percorso production sulla tua macchina. I dati demo si caricano al primo avvio."
   },
   "value": {
     "kicker": "Perché un compilatore, non un dump",
@@ -66,7 +73,8 @@
     "hasAccount": "Hai già un account?",
     "error": "Controlla il modulo e riprova.",
     "invalidEmail": "Inserisci un’email valida.",
-    "weakPassword": "La password deve avere almeno 10 caratteri, una lettera e un numero."
+    "weakPassword": "La password deve avere almeno 10 caratteri, una lettera e un numero.",
+    "demoHint": "Prova la demo precaricata:"
   },
   "app": {
     "onboarding": "Dai un cervello ai tuoi agenti",

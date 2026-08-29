@@ -1,5 +1,5 @@
-import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, type FormEvent, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api";
 import { useAuth } from "../auth";
@@ -9,11 +9,31 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { setAuthed } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [search] = useSearchParams();
+  const demo = search.get("demo") === "1";
+  const [email, setEmail] = useState(demo ? "demo@contextos.dev" : "");
+  const [password, setPassword] = useState(demo ? "DemoPassw0rd!" : "");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    if (demo && mode === "login") {
+      void (async () => {
+        setPending(true);
+        try {
+          await api("/api/v1/auth/login", {
+            method: "POST",
+            body: JSON.stringify({ email: "demo@contextos.dev", password: "DemoPassw0rd!" }),
+          });
+          setAuthed(true);
+          navigate("/app");
+        } catch {
+          setPending(false);
+        }
+      })();
+    }
+  }, [demo, mode, navigate, setAuthed]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -99,6 +119,14 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
           <button className="btn" disabled={pending} type="submit" data-testid="auth-submit">
             {mode === "login" ? t("auth.submitLogin") : t("auth.submitRegister")}
           </button>
+          {mode === "login" ? (
+            <p className="muted" style={{ margin: 0 }}>
+              {t("auth.demoHint")}{" "}
+              <Link to="/login?demo=1" data-testid="demo-login">
+                {t("cta.demo")}
+              </Link>
+            </p>
+          ) : null}
         </form>
         <p style={{ marginTop: 16 }}>
           {mode === "login" ? (

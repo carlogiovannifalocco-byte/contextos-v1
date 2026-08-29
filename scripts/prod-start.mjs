@@ -24,4 +24,7 @@ function run(cmd, args) {
 }
 
 await run("npm", ["run", "migrate", "-w", "@contextos/db"]);
+if (process.env.SEED_DEMO === "true") {
+  await run("npm", ["run", "seed", "-w", "@contextos/db"]);
+}
 await run("npx", ["tsx", "apps/api/src/index.ts"]);

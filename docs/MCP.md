@@ -14,7 +14,7 @@ cd /path/to/your/project
 npx contextos-memory init --api http://127.0.0.1:3010
 ```
 
-`contextos init` logs in (or registers), creates/selects a project, registers an agent, and writes `.cursor/mcp.json` + `.mcp.json` with the `cos_` key. Re-running merges into existing MCP config without duplicating servers.
+`contextos init` logs in (or registers), creates/selects a project, registers an agent, and writes `.cursor/mcp.json` + `.mcp.json` with the `cos_` key. It configures MCP to run **`contextos-mcp`** (bundled with the CLI) — no ContextOS repo checkout required. Re-running merges into existing MCP config without duplicating servers.
 
 Other commands:
 
@@ -43,15 +43,14 @@ contextos brief --focus "ignore file syntax" --budget 1500
 
 ## Cursor (copy this)
 
-`cwd` must be the ContextOS repo root so `npm run mcp` can find the workspace.
+After `contextos init`, your project already has `.cursor/mcp.json`. Manual snippet:
 
 ```json
 {
   "mcpServers": {
     "contextos": {
-      "command": "npm",
-      "args": ["run", "mcp"],
-      "cwd": "C:/Users/Utente/Desktop/ContextOS-v1 official",
+      "command": "contextos-mcp",
+      "args": [],
       "env": {
         "CONTEXTOS_API_URL": "http://127.0.0.1:3001",
         "CONTEXTOS_AGENT_KEY": "cos_YOUR_KEY",
@@ -62,14 +61,15 @@ contextos brief --focus "ignore file syntax" --budget 1500
 }
 ```
 
-Equivalent without `cwd` (still run Cursor with this repo as the workspace):
+**Monorepo dev:** if you run ContextOS from a git checkout, `init` may use `npm run mcp` with `cwd` set to that repo instead.
 
 ```json
 {
   "mcpServers": {
     "contextos": {
-      "command": "npx",
-      "args": ["tsx", "connectors/mcp/src/index.ts"],
+      "command": "npm",
+      "args": ["run", "mcp"],
+      "cwd": "/path/to/contextos-v1",
       "env": {
         "CONTEXTOS_API_URL": "http://127.0.0.1:3001",
         "CONTEXTOS_AGENT_KEY": "cos_YOUR_KEY",

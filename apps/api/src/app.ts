@@ -78,6 +78,22 @@ export async function buildApp(env: Env): Promise<FastifyInstance> {
         { name: "events" },
         { name: "webhooks" },
       ],
+      components: {
+        securitySchemes: {
+          sessionCookie: {
+            type: "apiKey",
+            in: "cookie",
+            name: "contextos_session",
+            description: "Browser session after login. Mutations also need x-csrf-token.",
+          },
+          agentBearer: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "cos_…",
+            description: "Agent API key from the Agents tab (shown once at registration).",
+          },
+        },
+      },
     },
   });
   await app.register(swaggerUi, { routePrefix: "/api/docs", uiConfig: { validatorUrl: null } });

@@ -10,16 +10,22 @@ import {
   type McpConfigFile,
 } from "./mcpConfig.js";
 
-const entry = buildServerEntry({
+const checkoutEntry = buildServerEntry({
   contextosRoot: "C:\\Users\\dev\\ContextOS",
   apiUrl: "http://127.0.0.1:3010",
   agentKey: "cos_abcdefghijklmnopqrstuvwxyz",
   projectId: "cmproject123",
 });
 
+const bundledEntry = buildServerEntry({
+  apiUrl: "http://127.0.0.1:3010",
+  agentKey: "cos_abcdefghijklmnopqrstuvwxyz",
+  projectId: "cmproject123",
+});
+
 describe("buildServerEntry", () => {
-  it("matches the documented npm run mcp shape", () => {
-    expect(entry).toEqual({
+  it("uses npm run mcp when a checkout path is provided", () => {
+    expect(checkoutEntry).toEqual({
       command: "npm",
       args: ["run", "mcp"],
       cwd: "C:/Users/dev/ContextOS",
@@ -31,6 +37,12 @@ describe("buildServerEntry", () => {
     });
   });
 
+  it("uses bundled contextos-mcp without a checkout", () => {
+    expect(bundledEntry.command).toBe("contextos-mcp");
+    expect(bundledEntry.args).toEqual([]);
+    expect(bundledEntry.env.CONTEXTOS_PROJECT_ID).toBe("cmproject123");
+  });
+
   it("normalizes Windows paths for JSON", () => {
     expect(toPosixPath("C:\\a\\b")).toBe("C:/a/b");
   });
@@ -38,14 +50,14 @@ describe("buildServerEntry", () => {
 
 describe("mergeMcpServer", () => {
   it("creates the file content when nothing exists yet", () => {
-    const { config, changed } = mergeMcpServer(undefined, "contextos", entry);
+    const { config, changed } = mergeMcpServer(undefined, "contextos", checkoutEntry);
     expect(changed).toBe(true);
-    expect(config.mcpServers["contextos"]).toEqual(entry);
+    expect(config.mcpServers["contextos"]).toEqual(checkoutEntry);
   });
 
   it("is idempotent: a second merge reports no change", () => {
-    const first = mergeMcpServer(undefined, "contextos", entry);
-    const second = mergeMcpServer(first.config, "contextos", entry);
+    const first = mergeMcpServer(undefined, "contextos", checkoutEntry);
+    const second = mergeMcpServer(first.config, "contextos", checkoutEntry);
     expect(second.changed).toBe(false);
     expect(second.config).toEqual(first.config);
     expect(Object.keys(second.config.mcpServers)).toEqual(["contextos"]);
@@ -58,7 +70,7 @@ describe("mergeMcpServer", () => {
         filesystem: { command: "npx", args: ["-y", "@modelcontextprotocol/server-filesystem", "."] },
       },
     };
-    const { config, changed } = mergeMcpServer(existing, "contextos", entry);
+    const { config, changed } = mergeMcpServer(existing, "contextos", checkoutEntry);
     expect(changed).toBe(true);
     expect(config["$schema"]).toBe("https://example.com/mcp.json");
     expect(config.mcpServers["filesystem"]).toEqual(existing.mcpServers["filesystem"]);
@@ -77,14 +89,14 @@ describe("mergeMcpServer", () => {
         },
       },
     };
-    const { config, changed } = mergeMcpServer(existing, "contextos", entry);
+    const { config, changed } = mergeMcpServer(existing, "contextos", checkoutEntry);
     expect(changed).toBe(true);
     expect(config.mcpServers["contextos"]).toEqual({
       command: "npm",
       args: ["run", "mcp"],
       cwd: "C:/Users/dev/ContextOS",
       disabled: false,
-      env: { ...entry.env, NODE_OPTIONS: "--no-warnings" },
+      env: { ...checkoutEntry.env, NODE_OPTIONS: "--no-warnings" },
     });
   });
 });
@@ -103,7 +115,7 @@ describe("parseMcpConfig", () => {
 
 describe("readServerConnection", () => {
   it("reads back what init wrote", () => {
-    const { config } = mergeMcpServer(undefined, "contextos", entry);
+    const { config } = mergeMcpServer(undefined, "contextos", checkoutEntry);
     expect(readServerConnection(config, "contextos")).toEqual({
       apiUrl: "http://127.0.0.1:3010",
       agentKey: "cos_abcdefghijklmnopqrstuvwxyz",

@@ -22,7 +22,7 @@ import { buildServerEntry } from "../mcpConfig.js";
 import { createPrompter, type Prompter } from "../prompt.js";
 import { redactKey } from "../redact.js";
 import { info, ok, out, style, warn } from "../ui.js";
-import { resolveContextosRoot } from "../workspace.js";
+import { tryResolveContextosRoot } from "../workspace.js";
 
 function slug(value: string): string {
   return value
@@ -193,7 +193,7 @@ async function obtainAgentKey(
 }
 
 export async function runInit(options: InitOptions, cwd: string): Promise<void> {
-  const contextosRoot = resolveContextosRoot(options.mcpCwd, cwd);
+  const contextosRoot = tryResolveContextosRoot(options.mcpCwd, cwd);
   const api = new ApiClient(options.api);
   const prompter = createPrompter(options.yes);
 
@@ -203,12 +203,19 @@ export async function runInit(options: InitOptions, cwd: string): Promise<void> 
     const project = await selectProject(api, prompter, options, cwd);
     const agentKey = await obtainAgentKey(api, prompter, options, project, cwd);
 
-    const entry = buildServerEntry({ contextosRoot, apiUrl: api.baseUrl, agentKey, projectId: project.id });
+    const entry = buildServerEntry({
+      contextosRoot,
+      apiUrl: api.baseUrl,
+      agentKey,
+      projectId: project.id,
+    });
     const written = writeMcpConfigs(cwd, entry);
     const changed = written.filter((result) => result.changed).map((result) => result.label);
     const unchanged = written.filter((result) => !result.changed).map((result) => result.label);
     if (changed.length > 0) ok("MCP config", changed.join(", "));
     if (unchanged.length > 0) info("MCP config", `${unchanged.join(", ")} already up to date`);
+    if (contextosRoot) info("MCP server", `npm run mcp from ${contextosRoot}`);
+    else info("MCP server", "contextos-mcp (bundled with the CLI — no repo checkout needed)");
 
     const ignore = ensureIgnoreFile(cwd);
     if (ignore.changed) ok("Ignore file", `${ignore.label} seeded with defaults`);

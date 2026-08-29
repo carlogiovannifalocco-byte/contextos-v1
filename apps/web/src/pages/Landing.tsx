@@ -35,6 +35,9 @@ export function Landing() {
             <Link className="btn" to="/register">
               {t("cta.start")}
             </Link>
+            <Link className="btn ghost" to="/login?demo=1">
+              {t("cta.demo")}
+            </Link>
             <Link className="btn ghost" to="/agents">
               {t("cta.mcp")}
             </Link>
@@ -68,6 +71,35 @@ export function Landing() {
             {t("landing.tapeHint")}
           </p>
         </aside>
+      </section>
+      <section className="wrap quickstart" data-testid="quickstart">
+        <p className="kicker">{t("landing.quickstartTitle")}</p>
+        <div className="grid-3">
+          <article className="card">
+            <h3>{t("landing.quickstartDemoTitle")}</h3>
+            <p className="muted">{t("landing.quickstartDemoBody")}</p>
+            <p>
+              <code>demo@contextos.dev</code> / <code>DemoPassw0rd!</code>
+            </p>
+            <Link className="btn" to="/login?demo=1">
+              {t("cta.demo")}
+            </Link>
+          </article>
+          <article className="card">
+            <h3>{t("landing.quickstartCliTitle")}</h3>
+            <p className="muted">{t("landing.quickstartCliBody")}</p>
+            <pre className="brief-md sample" style={{ fontSize: "0.78rem" }}>
+              {`npm i -g contextos-memory\ncontextos init --api http://127.0.0.1:3010`}
+            </pre>
+          </article>
+          <article className="card">
+            <h3>{t("landing.quickstartDockerTitle")}</h3>
+            <p className="muted">{t("landing.quickstartDockerBody")}</p>
+            <pre className="brief-md sample" style={{ fontSize: "0.78rem" }}>
+              {`docker compose -f docker-compose.prod.yml up --build`}
+            </pre>
+          </article>
+        </div>
       </section>
       <TokenCompare />
       <section className="wrap brief-teaser">

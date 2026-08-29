@@ -17,9 +17,8 @@ const TOOLS = [
 const CURSOR_JSON = `{
   "mcpServers": {
     "contextos": {
-      "command": "npm",
-      "args": ["run", "mcp"],
-      "cwd": "<absolute-path-to-this-repo>",
+      "command": "contextos-mcp",
+      "args": [],
       "env": {
         "CONTEXTOS_API_URL": "http://127.0.0.1:3001",
         "CONTEXTOS_AGENT_KEY": "cos_YOUR_KEY",

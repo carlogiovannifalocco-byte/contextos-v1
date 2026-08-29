@@ -22,6 +22,9 @@ export function PublicHeader({ authed }: { authed: boolean }) {
         <NavLink to="/agents">{t("nav.agents")}</NavLink>
         <NavLink to="/pricing">{t("nav.pricing")}</NavLink>
         <NavLink to="/changelog">{t("nav.changelog")}</NavLink>
+        <a href="https://github.com/carlogiovannifalocco-byte/contextos-v1" rel="noreferrer" target="_blank">
+          GitHub
+        </a>
         <a href="/api/docs">{t("nav.docs")}</a>
         <button
           className="icon-btn"
