@@ -39,8 +39,8 @@
     "audit": "npm audit --audit-level=high"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2",
-    "typescript": "^5.7.3"
+    "concurrently": "^10.0.5",
+    "typescript": "^7.0.2"
   },
   "overrides": {
     "@fastify/static": "10.1.3"
